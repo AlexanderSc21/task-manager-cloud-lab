@@ -8,69 +8,33 @@
 </head>
 <body>
   <div class="container">
-    <h1>Task Manager</h1>
-    <p class="subtitle">CloudTech Solutions</p>
+    <div class="logo">
+      <h1>Task Manager</h1>
+      <p class="subtitle">CloudTech Solutions</p>
+    </div>
 
     <div id="auth-box">
       <div id="login-form">
-        <h2>Login</h2>
-        <input type="text" id="login-user" placeholder="Username">
-        <input type="password" id="login-pass" placeholder="Password">
-        <button onclick="login()">Entrar</button>
-        <p>No tienes cuenta? <a href="#" onclick="showRegister()">Registrate</a></p>
+        <h2>Iniciar Sesion</h2>
+        <input type="text" id="login-user" placeholder="Usuario" autocomplete="username">
+        <input type="password" id="login-pass" placeholder="Contrasena" autocomplete="current-password">
+        <button id="login-btn" onclick="handleLogin()">Entrar</button>
+        <p class="auth-switch">No tienes cuenta? <a href="#" onclick="showRegister()">Registrate</a></p>
       </div>
 
       <div id="register-form" style="display:none">
-        <h2>Registro</h2>
-        <input type="text" id="reg-user" placeholder="Username">
-        <input type="password" id="reg-pass" placeholder="Password">
-        <button onclick="register()">Crear cuenta</button>
-        <p>Ya tienes cuenta? <a href="#" onclick="showLogin()">Login</a></p>
+        <h2>Crear Cuenta</h2>
+        <input type="text" id="reg-user" placeholder="Usuario" autocomplete="username">
+        <input type="password" id="reg-pass" placeholder="Contrasena (min 4 caracteres)" autocomplete="new-password">
+        <button id="reg-btn" onclick="handleRegister()">Crear cuenta</button>
+        <p class="auth-switch">Ya tienes cuenta? <a href="#" onclick="showLogin()">Iniciar sesion</a></p>
       </div>
 
-      <p id="auth-error" class="error"></p>
+      <div id="auth-error" class="error" style="display:none"></div>
     </div>
   </div>
+
+  <div id="toast-container"></div>
   <script src="/js/app.js"></script>
-  <script>
-    function showRegister() {
-      document.getElementById('login-form').style.display = 'none';
-      document.getElementById('register-form').style.display = 'block';
-    }
-    function showLogin() {
-      document.getElementById('register-form').style.display = 'none';
-      document.getElementById('login-form').style.display = 'block';
-    }
-    async function login() {
-      const username = document.getElementById('login-user').value;
-      const password = document.getElementById('login-pass').value;
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-      const data = await res.json();
-      if (data.success) {
-        window.location.href = '/dashboard.html';
-      } else {
-        document.getElementById('auth-error').textContent = data.error;
-      }
-    }
-    async function register() {
-      const username = document.getElementById('reg-user').value;
-      const password = document.getElementById('reg-pass').value;
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-      const data = await res.json();
-      if (data.success) {
-        window.location.href = '/dashboard.html';
-      } else {
-        document.getElementById('auth-error').textContent = data.error;
-      }
-    }
-  </script>
 </body>
 </html>

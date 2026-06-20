@@ -20,6 +20,13 @@ router.get('/', (req, res) => {
   res.json(tasks);
 });
 
+router.get('/stats', (req, res) => {
+  const tasks = readTasks().filter(t => t.userId === req.session.user.id);
+  const pending = tasks.filter(t => t.status === 'pending').length;
+  const done = tasks.filter(t => t.status === 'done').length;
+  res.json({ total: tasks.length, pending, done });
+});
+
 router.post('/', (req, res) => {
   const { title, description, dueDate } = req.body;
   if (!title) return res.status(400).json({ error: 'Title required' });
