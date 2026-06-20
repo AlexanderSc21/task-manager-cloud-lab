@@ -16,15 +16,7 @@ function writeTasks(tasks) {
 }
 
 router.get('/', (req, res) => {
-  const tasks = readTasks().filter(t => t.userId === req.session.user.id);
-  res.json(tasks);
-});
-
-router.get('/stats', (req, res) => {
-  const tasks = readTasks().filter(t => t.userId === req.session.user.id);
-  const pending = tasks.filter(t => t.status === 'pending').length;
-  const done = tasks.filter(t => t.status === 'done').length;
-  res.json({ total: tasks.length, pending, done });
+  res.json(readTasks());
 });
 
 router.post('/', (req, res) => {
@@ -34,7 +26,6 @@ router.post('/', (req, res) => {
   const tasks = readTasks();
   const newTask = {
     id: uuidv4(),
-    userId: req.session.user.id,
     title,
     description: description || '',
     dueDate: dueDate || null,
@@ -46,24 +37,9 @@ router.post('/', (req, res) => {
   res.json(newTask);
 });
 
-router.put('/:id', (req, res) => {
-  const tasks = readTasks();
-  const task = tasks.find(t => t.id === req.params.id && t.userId === req.session.user.id);
-  if (!task) return res.status(404).json({ error: 'Task not found' });
-
-  const { title, description, dueDate, status } = req.body;
-  if (title !== undefined) task.title = title;
-  if (description !== undefined) task.description = description;
-  if (dueDate !== undefined) task.dueDate = dueDate;
-  if (status !== undefined) task.status = status;
-
-  writeTasks(tasks);
-  res.json(task);
-});
-
 router.delete('/:id', (req, res) => {
-  let tasks = readTasks();
-  const index = tasks.findIndex(t => t.id === req.params.id && t.userId === req.session.user.id);
+  const tasks = readTasks();
+  const index = tasks.findIndex(t => t.id === req.params.id);
   if (index === -1) return res.status(404).json({ error: 'Task not found' });
 
   tasks.splice(index, 1);

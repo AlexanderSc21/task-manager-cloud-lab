@@ -3,34 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task Manager - Login</title>
+  <title>Task Manager - CloudTech Solutions</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div class="container">
-    <div class="logo">
-      <h1>Task Manager</h1>
-      <p class="subtitle">CloudTech Solutions</p>
+    <div class="header">
+      <div>
+        <h1>Task Manager</h1>
+        <p class="subtitle">CloudTech Solutions</p>
+      </div>
     </div>
 
-    <div id="auth-box">
-      <div id="login-form">
-        <h2>Iniciar Sesion</h2>
-        <input type="text" id="login-user" placeholder="Usuario" autocomplete="username">
-        <input type="password" id="login-pass" placeholder="Contrasena" autocomplete="current-password">
-        <button id="login-btn" onclick="handleLogin()">Entrar</button>
-        <p class="auth-switch">No tienes cuenta? <a href="#" onclick="showRegister()">Registrate</a></p>
-      </div>
+    <div class="add-task">
+      <input type="text" id="task-title" placeholder="Nueva tarea...">
+      <input type="text" id="task-desc" placeholder="Descripcion (opcional)">
+      <input type="date" id="task-date">
+      <button id="add-btn" onclick="addTask()">Agregar</button>
+    </div>
 
-      <div id="register-form" style="display:none">
-        <h2>Crear Cuenta</h2>
-        <input type="text" id="reg-user" placeholder="Usuario" autocomplete="username">
-        <input type="password" id="reg-pass" placeholder="Contrasena (min 4 caracteres)" autocomplete="new-password">
-        <button id="reg-btn" onclick="handleRegister()">Crear cuenta</button>
-        <p class="auth-switch">Ya tienes cuenta? <a href="#" onclick="showLogin()">Iniciar sesion</a></p>
-      </div>
+    <div id="task-stats" class="task-stats">
+      <span class="stat pending">0 pendientes</span>
+      <span class="stat done">0 completadas</span>
+    </div>
 
-      <div id="auth-error" class="error" style="display:none"></div>
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterTasks('all', this)">Todas</button>
+      <button class="filter-btn" onclick="filterTasks('pending', this)">Pendientes</button>
+      <button class="filter-btn" onclick="filterTasks('done', this)">Completadas</button>
+    </div>
+
+    <ul id="task-list"></ul>
+
+    <div id="empty-state" class="empty-state" style="display:none">
+      <p>No hay tareas aun</p>
+      <span>Crea tu primera tarea arriba</span>
+    </div>
+  </div>
+
+  <div id="confirm-modal" class="modal-overlay" style="display:none">
+    <div class="modal">
+      <h2>Eliminar tarea?</h2>
+      <p>Esta accion no se puede deshacer.</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeConfirm()">Cancelar</button>
+        <button class="btn-delete-confirm" onclick="confirmDelete()">Eliminar</button>
+      </div>
     </div>
   </div>
 

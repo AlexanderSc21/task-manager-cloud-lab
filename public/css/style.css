@@ -20,7 +20,7 @@ body {
   max-width: 640px;
 }
 
-.logo h1 {
+h1 {
   font-size: 2rem;
   color: #38bdf8;
 }
@@ -31,33 +31,7 @@ body {
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.header .subtitle {
-  margin-bottom: 0;
-}
-
-/* ===== Auth Box ===== */
-#auth-box {
-  background: #1e293b;
-  padding: 30px;
-  border-radius: 12px;
-}
-
-#auth-box h2 {
-  margin-bottom: 20px;
-  color: #38bdf8;
-}
-
-.auth-switch {
-  margin-top: 16px;
-  text-align: center;
-  color: #64748b;
-  font-size: 14px;
+  margin-bottom: 30px;
 }
 
 input {
@@ -66,7 +40,7 @@ input {
   margin-bottom: 12px;
   border: 1px solid #334155;
   border-radius: 8px;
-  background: #0f172a;
+  background: #1e293b;
   color: #e2e8f0;
   font-size: 14px;
   transition: border-color 0.2s;
@@ -78,8 +52,7 @@ input:focus {
 }
 
 button {
-  width: 100%;
-  padding: 12px;
+  padding: 12px 20px;
   background: #38bdf8;
   color: #0f172a;
   border: none;
@@ -87,37 +60,11 @@ button {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s, opacity 0.2s;
+  transition: background 0.2s;
 }
 
 button:hover {
   background: #7dd3fc;
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.error {
-  color: #ef4444;
-  margin-top: 12px;
-  text-align: center;
-  font-size: 14px;
-  padding: 8px;
-  background: rgba(239, 68, 68, 0.1);
-  border-radius: 6px;
-}
-
-.btn-logout {
-  width: auto;
-  padding: 8px 16px;
-  background: #ef4444;
-  font-size: 12px;
-}
-
-.btn-logout:hover {
-  background: #f87171;
 }
 
 a {
@@ -183,8 +130,6 @@ a:hover {
 
 .add-task button {
   flex: 0 0 auto;
-  width: auto;
-  padding: 12px 20px;
 }
 
 /* ===== Filters ===== */
@@ -196,7 +141,6 @@ a:hover {
 
 .filter-btn {
   flex: 1;
-  width: auto;
   background: #1e293b;
   color: #94a3b8;
   border: 1px solid #334155;
@@ -231,7 +175,7 @@ a:hover {
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 8px;
-  transition: opacity 0.2s, transform 0.2s;
+  transition: transform 0.2s;
 }
 
 .task-item:hover {
@@ -274,27 +218,7 @@ a:hover {
   display: block;
 }
 
-.task-actions {
-  display: flex;
-  gap: 6px;
-}
-
-.btn-edit {
-  width: auto;
-  padding: 6px 12px;
-  background: transparent;
-  color: #38bdf8;
-  border: 1px solid #38bdf8;
-  font-size: 12px;
-}
-
-.btn-edit:hover {
-  background: #38bdf8;
-  color: #0f172a;
-}
-
 .btn-delete {
-  width: auto;
   padding: 6px 12px;
   background: transparent;
   color: #ef4444;
@@ -360,7 +284,6 @@ a:hover {
 .modal-actions {
   display: flex;
   gap: 10px;
-  margin-top: 20px;
 }
 
 .modal-actions button {
@@ -374,15 +297,6 @@ a:hover {
 
 .btn-cancel:hover {
   background: #475569;
-}
-
-.btn-save {
-  background: #38bdf8;
-  color: #0f172a;
-}
-
-.btn-save:hover {
-  background: #7dd3fc;
 }
 
 .btn-delete-confirm {
@@ -444,17 +358,13 @@ a:hover {
     width: 100%;
   }
 
-  .task-actions {
-    flex-direction: column;
-  }
-
   .task-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
 
-  .task-actions {
+  .btn-delete {
     align-self: flex-end;
   }
 }

@@ -11,11 +11,11 @@ Aplicacion web para gestion de tareas desplegada en Google Cloud Run.
 
 ## Funcionalidades
 
-- Registro y login de usuarios
-- Crear, editar, eliminar tareas
-- Cambiar estado (pendiente / completada)
-- Fecha limite por tarea
+- Crear tareas con titulo, descripcion y fecha limite
+- Eliminar tareas
+- Marcar tareas como pendientes / completadas
 - Filtrar por estado
+- Persistencia en archivo JSON
 
 ## Ejecutar local
 
@@ -36,9 +36,6 @@ Abrir http://localhost:3000
 4. Seleccionar "Continuously deploy from a repository"
 5. Conectar tu repositorio de GitHub
 6. Configurar:
-   - **Region:** us-central1
-   - **CPU:** 1
-   - **Memory:** 512 MiB
    - **Port:** 8080
    - **Startup type:** Dockerfile
 7. Click "Create"
@@ -46,10 +43,8 @@ Abrir http://localhost:3000
 ### Opcion 2: CLI
 
 ```bash
-# Build
 gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/task-manager
 
-# Deploy
 gcloud run deploy task-manager \
   --image gcr.io/YOUR_PROJECT_ID/task-manager \
   --platform managed \
@@ -61,13 +56,14 @@ gcloud run deploy task-manager \
 
 ```
 ├── src/
-│   ├── app.js              # Server Express
-│   ├── middleware/auth.js   # Auth middleware
-│   ├── routes/auth.js      # Login/Register/Logout
-│   ├── routes/tasks.js     # CRUD tareas
-│   └── data/               # JSON storage
-├── public/                 # Frontend
-├── Dockerfile              # Cloud Run config
+│   ├── app.js            # Server Express
+│   ├── routes/tasks.js   # CRUD tareas
+│   └── data/tasks.json   # Persistencia JSON
+├── public/
+│   ├── index.html        # Interfaz principal
+│   ├── css/style.css
+│   └── js/app.js
+├── Dockerfile
 └── README.md
 ```
 
@@ -75,13 +71,13 @@ gcloud run deploy task-manager \
 
 | Metodo | Ruta | Descripcion |
 |--------|------|-------------|
-| POST | /api/auth/register | Registro |
-| POST | /api/auth/login | Login |
-| GET | /api/auth/logout | Logout |
 | GET | /api/tasks | Listar tareas |
 | POST | /api/tasks | Crear tarea |
-| PUT | /api/tasks/:id | Actualizar tarea |
 | DELETE | /api/tasks/:id | Eliminar tarea |
+
+## Datos Seed
+
+El archivo `tasks.json` viene con 5 tareas de ejemplo para probar la aplicacion.
 
 ## Autores
 
