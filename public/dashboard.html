@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Manager - Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Mis Tareas</h1>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="add-task">
+      <input type="text" id="task-title" placeholder="Nueva tarea...">
+      <input type="text" id="task-desc" placeholder="Descripcion (opcional)">
+      <input type="date" id="task-date">
+      <button onclick="addTask()">Agregar</button>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterTasks('all')">Todas</button>
+      <button class="filter-btn" onclick="filterTasks('pending')">Pendientes</button>
+      <button class="filter-btn" onclick="filterTasks('done')">Completadas</button>
+    </div>
+
+    <ul id="task-list"></ul>
+  </div>
+  <script src="/js/app.js"></script>
+  <script>
+    let tasks = [];
+    let currentFilter = 'all';
+
+    async function loadTasks() {
+      const res = await fetch('/api/tasks');
+      if (res.status === 401) {
+        window.location.href = '/';
+        return;
+      }
+      tasks = await res.json();
+      renderTasks();
+    }
+
+    function renderTasks() {
+      const list = document.getElementById('task-list');
+      const filtered = currentFilter === 'all' ? tasks : tasks.filter(t => t.status === currentFilter);
+      list.innerHTML = filtered.map(t => `
+        <li class="task-item ${t.status === 'done' ? 'done' : ''}">
+          <div class="task-info">
+            <input type="checkbox" ${t.status === 'done' ? 'checked' : ''} onchange="toggleTask('${t.id}')">
+            <div>
+              <strong>${t.title}</strong>
+              ${t.description ? `<p>${t.description}</p>` : ''}
+              ${t.dueDate ? `<span class="due-date">Fecha limite: ${t.dueDate}</span>` : ''}
+            </div>
+          </div>
+          <button class="btn-delete" onclick="deleteTask('${t.id}')">X</button>
+        </li>
+      `).join('');
+    }
+
+    function filterTasks(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      renderTasks();
+    }
+
+    async function addTask() {
+      const title = document.getElementById('task-title').value;
+      const description = document.getElementById('task-desc').value;
+      const dueDate = document.getElementById('task-date').value;
+      if (!title) return;
+
+      const res = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, description, dueDate })
+      });
+      const task = await res.json();
+      tasks.push(task);
+      renderTasks();
+      document.getElementById('task-title').value = '';
+      document.getElementById('task-desc').value = '';
+      document.getElementById('task-date').value = '';
+    }
+
+    async function toggleTask(id) {
+      const task = tasks.find(t => t.id === id);
+      const newStatus = task.status === 'done' ? 'pending' : 'done';
+      await fetch(`/api/tasks/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+      task.status = newStatus;
+      renderTasks();
+    }
+
+    async function deleteTask(id) {
+      await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+      tasks = tasks.filter(t => t.id !== id);
+      renderTasks();
+    }
+
+    async function logout() {
+      await fetch('/api/auth/logout');
+      window.location.href = '/';
+    }
+
+    loadTasks();
+  </script>
+</body>
+</html>
