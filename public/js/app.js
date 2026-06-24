@@ -162,3 +162,4 @@ async function clearCompleted() {
 }
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', loadTasks);
+module.exports = app;
