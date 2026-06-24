@@ -144,5 +144,21 @@ function showToast(message, type = 'success') {
   }, 3000);
 }
 
+// ===== Limpiar Completadas =====
+async function clearCompleted() {
+  const completedTasks = tasks.filter(t => t.status === 'done');
+  
+  if (completedTasks.length === 0) {
+    showToast('No hay tareas completadas para limpiar', 'error');
+    return;
+  }
+
+  for (const task of completedTasks) {
+    await apiFetch('/api/tasks/' + task.id, { method: 'DELETE' });
+  }
+
+  await loadTasks();
+  showToast('Se limpiaron las tareas completadas');
+}
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', loadTasks);
